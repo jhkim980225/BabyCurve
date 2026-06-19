@@ -50,7 +50,12 @@ export function InputForm({ onCalculate }: InputFormProps) {
           aria-label="standard"
           className="mt-1 w-full rounded-lg bg-white/60 p-2"
           value={standardId}
-          onChange={(e) => setStandardId(e.target.value)}
+          onChange={(e) => {
+            const newStandardId = e.target.value;
+            const newMetrics = standards.find((s) => s.id === newStandardId)?.metrics ?? [];
+            setStandardId(newStandardId);
+            setMetricId(newMetrics[0]);
+          }}
         >
           {standards.map((s) => (
             <option key={s.id} value={s.id}>{s.name}</option>

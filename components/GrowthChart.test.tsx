@@ -22,4 +22,14 @@ describe('GrowthChart', () => {
     expect(container.querySelector('polyline')).toBeInTheDocument();
     expect(container.querySelector('[data-testid="marker"]')).toBeInTheDocument();
   });
+
+  it('clamps an out-of-range marker week to the chart area', () => {
+    const { container } = render(
+      <GrowthChart metric={metric} markerWeek={10} markerValue={500} />,
+    );
+    const marker = container.querySelector('[data-testid="marker"]');
+    const cx = marker?.getAttribute('cx');
+    expect(cx).not.toBeNull();
+    expect(Number.isNaN(Number(cx))).toBe(false);
+  });
 });

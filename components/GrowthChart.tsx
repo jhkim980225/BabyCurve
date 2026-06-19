@@ -21,10 +21,14 @@ export function GrowthChart({
   height = 240,
 }: GrowthChartProps) {
   const weeks = Object.keys(metric.weeks).map(Number).sort((a, b) => a - b);
+
+  if (weeks.length < 2) return null;
+
   const rows = weeks.map((w) => ({ w, ...metric.weeks[String(w)] }));
 
   const minWeek = weeks[0];
   const maxWeek = weeks[weeks.length - 1];
+  const clampedWeek = Math.min(maxWeek, Math.max(minWeek, markerWeek));
   const maxVal = Math.max(...rows.map((r) => r.p97)) * 1.05;
   const minVal = Math.min(...rows.map((r) => r.p3)) * 0.9;
 
@@ -46,16 +50,16 @@ export function GrowthChart({
       <polygon points={bandPolygon('p90', 'p10')} fill="rgba(37,99,235,0.20)" />
       <polyline points={lineFor('p50')} fill="none" stroke="#2563eb" strokeWidth={2} />
       <line
-        x1={x(markerWeek)}
+        x1={x(clampedWeek)}
         y1={y(markerValue)}
-        x2={x(markerWeek)}
+        x2={x(clampedWeek)}
         y2={height - PAD.bottom}
         stroke="#1e3a8a"
         strokeDasharray="3 3"
       />
       <circle
         data-testid="marker"
-        cx={x(markerWeek)}
+        cx={x(clampedWeek)}
         cy={y(markerValue)}
         r={6}
         fill="#1e3a8a"
