@@ -56,6 +56,17 @@ describe('valueToPercentile', () => {
   it('clamps to 97 above the highest cutoff', () => {
     expect(valueToPercentile(2000, cutoffs)).toBe(97);
   });
+
+  it('returns the exact percentile for a middle cutoff value', () => {
+    expect(valueToPercentile(1000, cutoffs)).toBeCloseTo(10, 5);
+  });
+
+  it('does not return NaN when adjacent cutoffs are equal', () => {
+    const flat = { p3: 880, p10: 1200, p50: 1200, p90: 1300, p97: 1400 };
+    const result = valueToPercentile(1200, flat);
+    expect(Number.isNaN(result)).toBe(false);
+    expect(result).toBeCloseTo(50, 5);
+  });
 });
 
 describe('computePercentile', () => {

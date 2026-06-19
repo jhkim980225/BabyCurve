@@ -54,6 +54,18 @@ export function valueToPercentile(
 
   for (let i = 0; i < points.length - 1; i++) {
     if (value >= points[i].v && value <= points[i + 1].v) {
+      if (points[i + 1].v === points[i].v) {
+        // Flat segment: scan ahead to find the highest percentile at this value
+        let j = i + 1;
+        while (j < points.length - 1 && points[j + 1].v === points[i].v) j++;
+        return points[j].p;
+      }
+      // If value exactly equals points[i+1].v, check for a flat run starting there
+      if (value === points[i + 1].v) {
+        let j = i + 1;
+        while (j < points.length - 1 && points[j + 1].v === points[i + 1].v) j++;
+        return points[j].p;
+      }
       const t = (value - points[i].v) / (points[i + 1].v - points[i].v);
       return points[i].p + t * (points[i + 1].p - points[i].p);
     }
