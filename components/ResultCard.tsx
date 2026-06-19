@@ -1,6 +1,7 @@
 'use client';
 
 import { GrowthChart } from './GrowthChart';
+import { ordinalSuffix } from '@/lib/ordinal';
 import type { MetricData } from '@/lib/types';
 
 interface ResultCardProps {
@@ -31,7 +32,7 @@ export function ResultCard({
       </p>
       <p className="my-1 text-5xl font-bold text-blue-900">
         {rounded}
-        <span className="align-top text-lg text-blue-500">th</span>
+        <span className="align-top text-lg text-blue-500">{ordinalSuffix(rounded)}</span>
       </p>
       <p className="mb-3 text-xs uppercase tracking-widest text-slate-500">percentile</p>
 

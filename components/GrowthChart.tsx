@@ -31,6 +31,7 @@ export function GrowthChart({
   const clampedWeek = Math.min(maxWeek, Math.max(minWeek, markerWeek));
   const maxVal = Math.max(...rows.map((r) => r.p97)) * 1.05;
   const minVal = Math.min(...rows.map((r) => r.p3)) * 0.9;
+  const clampedValue = Math.min(maxVal, Math.max(minVal, markerValue));
 
   const x = scaleLinear().domain([minWeek, maxWeek]).range([PAD.left, width - PAD.right]);
   const y = scaleLinear().domain([minVal, maxVal]).range([height - PAD.bottom, PAD.top]);
@@ -51,7 +52,7 @@ export function GrowthChart({
       <polyline points={lineFor('p50')} fill="none" stroke="#2563eb" strokeWidth={2} />
       <line
         x1={x(clampedWeek)}
-        y1={y(markerValue)}
+        y1={y(clampedValue)}
         x2={x(clampedWeek)}
         y2={height - PAD.bottom}
         stroke="#1e3a8a"
@@ -60,7 +61,7 @@ export function GrowthChart({
       <circle
         data-testid="marker"
         cx={x(clampedWeek)}
-        cy={y(markerValue)}
+        cy={y(clampedValue)}
         r={6}
         fill="#1e3a8a"
         stroke="#fff"
