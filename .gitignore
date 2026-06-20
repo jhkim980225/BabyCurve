@@ -48,3 +48,15 @@ next-env.d.ts
 
 *.stackdump
 .gstack/
+
+# Capacitor / Android build artifacts
+# android/ project sources ARE committed; only build output and secrets are ignored.
+# Run `npx cap sync android` before building to regenerate the assets below.
+/android/.gradle/
+/android/app/build/
+/android/build/
+/android/local.properties
+/android/.idea/
+/android/app/src/main/assets/public/
+/android/app/src/main/assets/capacitor.config.json
+/android/capacitor-cordova-android-plugins/
