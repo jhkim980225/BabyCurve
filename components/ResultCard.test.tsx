@@ -28,4 +28,19 @@ describe('ResultCard', () => {
     expect(screen.getByText(/not medical advice/i)).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /growth chart/i })).toBeInTheDocument();
   });
+
+  it('passes extraMarkers to GrowthChart when provided', () => {
+    const { container } = render(
+      <ResultCard
+        metric={metric}
+        weeks={30}
+        days={0}
+        value={1500}
+        percentile={45}
+        standardName="WHO Fetal Growth"
+        extraMarkers={[{ week: 28, value: 1200 }]}
+      />,
+    );
+    expect(container.querySelectorAll('[data-testid="extra-marker"]')).toHaveLength(1);
+  });
 });

@@ -1,45 +1,42 @@
 'use client';
 
-import { useState } from 'react';
-import { InputForm, type CalcInput } from '@/components/InputForm';
-import { ResultCard } from '@/components/ResultCard';
-import { getStandard } from '@/lib/data';
-import { computePercentile } from '@/lib/percentile';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { LOCALES } from '@/lib/i18n';
+import { LanguageSelect } from '@/components/LanguageSelect';
 
-interface Result {
-  input: CalcInput;
-  percentile: number;
-  standardName: string;
-}
+const LOCALE_STORAGE_KEY = 'babycurve.locale';
 
-export default function Home() {
-  const [result, setResult] = useState<Result | null>(null);
+type PageState = 'loading' | 'selector' | 'redirecting';
 
-  const handleCalculate = (input: CalcInput) => {
-    const standard = getStandard(input.standardId);
-    const metric = standard.metrics[input.metricId];
-    const percentile = computePercentile(metric, input.weeks, input.days, input.value);
-    setResult({ input, percentile, standardName: standard.name });
-  };
+export default function RootPage() {
+  const router = useRouter();
+  const [state, setState] = useState<PageState>('loading');
 
-  const metric = result ? getStandard(result.input.standardId).metrics[result.input.metricId] : null;
+  useEffect(() => {
+    const stored =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem(LOCALE_STORAGE_KEY)
+        : null;
 
-  return (
-    <main className="mx-auto flex max-w-md flex-col gap-4 p-4">
-      <h1 className="text-center text-xl font-bold text-blue-900">
-        Fetal Growth Calculator
-      </h1>
-      <InputForm onCalculate={handleCalculate} />
-      {result && metric && (
-        <ResultCard
-          metric={metric}
-          weeks={result.input.weeks}
-          days={result.input.days}
-          value={result.input.value}
-          percentile={result.percentile}
-          standardName={result.standardName}
-        />
-      )}
-    </main>
-  );
+    const valid = !!stored && LOCALES.some((l) => l.code === stored);
+    if (valid) {
+      // Stored preference → navigate directly
+      router.replace('/' + stored);
+    }
+    // One-time, client-only locale routing decision; intentional single setState.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setState(valid ? 'redirecting' : 'selector');
+  }, [router]);
+
+  if (state === 'loading' || state === 'redirecting') {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <span className="text-slate-400 text-sm">Loading…</span>
+      </div>
+    );
+  }
+
+  // state === 'selector'
+  return <LanguageSelect />;
 }

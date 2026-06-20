@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { getStandardIndex } from '@/lib/data';
+import { useT } from '@/components/I18nProvider';
 
 export interface CalcInput {
   standardId: string;
@@ -13,15 +14,26 @@ export interface CalcInput {
 
 interface InputFormProps {
   onCalculate: (input: CalcInput) => void;
+  initialMetricId?: string;
+  initialWeeks?: number;
+  initialDays?: number;
+  initialValue?: number;
 }
 
-export function InputForm({ onCalculate }: InputFormProps) {
+export function InputForm({
+  onCalculate,
+  initialMetricId,
+  initialWeeks,
+  initialDays,
+  initialValue,
+}: InputFormProps) {
+  const t = useT();
   const standards = getStandardIndex().standards;
   const [standardId, setStandardId] = useState(standards[0].id);
-  const [metricId, setMetricId] = useState(standards[0].metrics[0]);
-  const [weeks, setWeeks] = useState('');
-  const [days, setDays] = useState('');
-  const [value, setValue] = useState('');
+  const [metricId, setMetricId] = useState(initialMetricId ?? standards[0].metrics[0]);
+  const [weeks, setWeeks] = useState(initialWeeks !== undefined ? String(initialWeeks) : '');
+  const [days, setDays] = useState(initialDays !== undefined ? String(initialDays) : '');
+  const [value, setValue] = useState(initialValue !== undefined ? String(initialValue) : '');
   const [error, setError] = useState('');
 
   const metrics = standards.find((s) => s.id === standardId)?.metrics ?? [];
@@ -31,11 +43,11 @@ export function InputForm({ onCalculate }: InputFormProps) {
     const d = days === '' ? 0 : Number(days);
     const v = Number(value);
     if (!weeks || Number.isNaN(w) || w < 0) {
-      setError('Please enter a valid gestational week.');
+      setError(t('form.errorWeeks'));
       return;
     }
     if (!value || Number.isNaN(v) || v <= 0) {
-      setError('Please enter a measurement.');
+      setError(t('form.errorMeasurement'));
       return;
     }
     setError('');
@@ -45,7 +57,7 @@ export function InputForm({ onCalculate }: InputFormProps) {
   return (
     <div className="glass-card flex flex-col gap-3 p-4">
       <label className="text-sm">
-        Standard
+        {t('form.standard')}
         <select
           aria-label="standard"
           className="mt-1 w-full rounded-lg bg-white/60 p-2"
@@ -64,7 +76,7 @@ export function InputForm({ onCalculate }: InputFormProps) {
       </label>
 
       <label className="text-sm">
-        Metric
+        {t('form.metric')}
         <select
           aria-label="metric"
           className="mt-1 w-full rounded-lg bg-white/60 p-2"
@@ -79,7 +91,7 @@ export function InputForm({ onCalculate }: InputFormProps) {
 
       <div className="flex gap-2">
         <label className="flex-1 text-sm">
-          Weeks
+          {t('form.weeks')}
           <input
             aria-label="weeks"
             inputMode="numeric"
@@ -89,7 +101,7 @@ export function InputForm({ onCalculate }: InputFormProps) {
           />
         </label>
         <label className="flex-1 text-sm">
-          Days
+          {t('form.days')}
           <input
             aria-label="days"
             inputMode="numeric"
@@ -101,7 +113,7 @@ export function InputForm({ onCalculate }: InputFormProps) {
       </div>
 
       <label className="text-sm">
-        Measurement
+        {t('form.measurement')}
         <input
           aria-label="measurement"
           inputMode="numeric"
@@ -118,7 +130,7 @@ export function InputForm({ onCalculate }: InputFormProps) {
         onClick={submit}
         className="rounded-xl bg-blue-700 p-3 font-semibold text-white"
       >
-        Calculate
+        {t('form.calculate')}
       </button>
     </div>
   );
