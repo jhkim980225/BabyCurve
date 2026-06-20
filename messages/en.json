@@ -34,8 +34,7 @@
   },
   "dev": {
     "heading": "Week {week} — Development",
-    "sizeComparison": "Your baby is about the size of {size}.",
-    "weekLabel": "Week"
+    "sizeComparison": "Your baby is about the size of {size}."
   },
   "languageSelect": {
     "chooseLanguage": "Choose your language"

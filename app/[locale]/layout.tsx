@@ -53,7 +53,10 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     notFound();
   }
 
-  const jsonLd = buildJsonLd(locale);
+  const messages = getMessages(locale);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const description: string | undefined = (messages as any).app?.description;
+  const jsonLd = buildJsonLd(locale, description);
 
   return (
     <>

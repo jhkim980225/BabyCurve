@@ -30,7 +30,10 @@ export function buildAlternates(
   };
 }
 
-export function buildJsonLd(locale: string): {
+export function buildJsonLd(
+  locale: string,
+  description?: string,
+): {
   '@context': string;
   '@type': string;
   name: string;
@@ -44,7 +47,7 @@ export function buildJsonLd(locale: string): {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'BabyCurve',
-    description: enMessages.app.description,
+    description: description ?? enMessages.app.description,
     applicationCategory: 'MedicalApplication',
     inLanguage: locale,
     isAccessibleForFree: true,
