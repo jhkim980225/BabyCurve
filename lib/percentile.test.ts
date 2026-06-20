@@ -36,6 +36,19 @@ describe('interpolateCutoffs', () => {
   it('clamps above the highest known week', () => {
     expect(interpolateCutoffs(metric, 40)).toEqual(metric.weeks['32']);
   });
+
+  it('clamping below returns an equal but distinct object (not same reference)', () => {
+    const src = metric.weeks['28'];
+    const result = interpolateCutoffs(metric, 20);
+    expect(result).toEqual(src);
+    expect(result).not.toBe(src);
+  });
+
+  it('mutating the clamped result does not affect source data', () => {
+    const result = interpolateCutoffs(metric, 20);
+    result.p50 = 9999;
+    expect(metric.weeks['28'].p50).toBe(1150);
+  });
 });
 
 describe('valueToPercentile', () => {

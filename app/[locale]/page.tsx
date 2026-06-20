@@ -61,7 +61,7 @@ export default function LocalePage() {
   };
 
   const handleEfwEstimated = (grams: number) => {
-    setFormSeed({ metricId: 'efw', value: grams });
+    setFormSeed((prev) => ({ ...prev, metricId: 'efw', value: grams }));
     setFormKey((k) => k + 1);
   };
 

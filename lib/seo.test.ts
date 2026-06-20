@@ -62,6 +62,17 @@ describe('seo', () => {
       expect(typeof ld.description).toBe('string');
       expect(ld.description.length).toBeGreaterThan(0);
     });
+
+    it('uses the provided description argument when given', () => {
+      const ld = buildJsonLd('ja', 'こんにちは');
+      expect(ld.description).toBe('こんにちは');
+    });
+
+    it('falls back to a non-empty string when description is omitted', () => {
+      const ld = buildJsonLd('ko');
+      expect(typeof ld.description).toBe('string');
+      expect(ld.description.length).toBeGreaterThan(0);
+    });
   });
 
   describe('constants', () => {

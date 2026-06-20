@@ -16,8 +16,8 @@ export function interpolateCutoffs(
   const first = weekKeys[0];
   const last = weekKeys[weekKeys.length - 1];
 
-  if (weekDecimal <= first) return metric.weeks[String(first)];
-  if (weekDecimal >= last) return metric.weeks[String(last)];
+  if (weekDecimal <= first) return { ...metric.weeks[String(first)] };
+  if (weekDecimal >= last) return { ...metric.weeks[String(last)] };
 
   let lower = first;
   let upper = last;
