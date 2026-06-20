@@ -14,16 +14,26 @@ export interface CalcInput {
 
 interface InputFormProps {
   onCalculate: (input: CalcInput) => void;
+  initialMetricId?: string;
+  initialWeeks?: number;
+  initialDays?: number;
+  initialValue?: number;
 }
 
-export function InputForm({ onCalculate }: InputFormProps) {
+export function InputForm({
+  onCalculate,
+  initialMetricId,
+  initialWeeks,
+  initialDays,
+  initialValue,
+}: InputFormProps) {
   const t = useT();
   const standards = getStandardIndex().standards;
   const [standardId, setStandardId] = useState(standards[0].id);
-  const [metricId, setMetricId] = useState(standards[0].metrics[0]);
-  const [weeks, setWeeks] = useState('');
-  const [days, setDays] = useState('');
-  const [value, setValue] = useState('');
+  const [metricId, setMetricId] = useState(initialMetricId ?? standards[0].metrics[0]);
+  const [weeks, setWeeks] = useState(initialWeeks !== undefined ? String(initialWeeks) : '');
+  const [days, setDays] = useState(initialDays !== undefined ? String(initialDays) : '');
+  const [value, setValue] = useState(initialValue !== undefined ? String(initialValue) : '');
   const [error, setError] = useState('');
 
   const metrics = standards.find((s) => s.id === standardId)?.metrics ?? [];

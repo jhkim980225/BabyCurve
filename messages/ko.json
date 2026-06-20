@@ -38,5 +38,23 @@
   },
   "languageSelect": {
     "chooseLanguage": "Choose your language"
+  },
+  "efw": {
+    "panelTitle": "Estimate EFW from biometrics",
+    "bpd": "BPD (cm)",
+    "hc": "HC (cm)",
+    "ac": "AC (cm)",
+    "fl": "FL (cm)",
+    "estimateButton": "Estimate EFW",
+    "result": "Estimated weight: {grams} g",
+    "errorMissingAll": "Please enter all four measurements."
+  },
+  "dueDate": {
+    "panelTitle": "Due date & gestational age",
+    "lmpLabel": "Last menstrual period (LMP)",
+    "calculateButton": "Calculate",
+    "edd": "Estimated due date: {date}",
+    "ga": "Gestational age: {weeks}w {days}d",
+    "useGaButton": "Use this gestational age"
   }
 }

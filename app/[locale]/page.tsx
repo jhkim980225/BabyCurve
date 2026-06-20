@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { InputForm, type CalcInput } from '@/components/InputForm';
 import { ResultCard } from '@/components/ResultCard';
 import { HistoryPanel } from '@/components/HistoryPanel';
+import { EfwEstimator } from '@/components/EfwEstimator';
+import { DueDateCalculator } from '@/components/DueDateCalculator';
 import { getStandard } from '@/lib/data';
 import { computePercentile } from '@/lib/percentile';
 import { addMeasurement, clearMeasurements, getMeasurements, type Measurement } from '@/lib/storage';
@@ -18,6 +20,13 @@ interface Result {
   standardName: string;
 }
 
+interface FormSeed {
+  metricId?: string;
+  weeks?: number;
+  days?: number;
+  value?: number;
+}
+
 interface LocalePageProps {
   params: Promise<{ locale: string }>;
 }
@@ -26,6 +35,8 @@ export default function LocalePage({ params: _params }: LocalePageProps) {
   const t = useT();
   const [result, setResult] = useState<Result | null>(null);
   const [history, setHistory] = useState<Measurement[]>([]);
+  const [formSeed, setFormSeed] = useState<FormSeed>({});
+  const [formKey, setFormKey] = useState(0);
 
   const handleCalculate = (input: CalcInput) => {
     const standard = getStandard(input.standardId);
@@ -53,6 +64,16 @@ export default function LocalePage({ params: _params }: LocalePageProps) {
     setHistory([]);
   };
 
+  const handleEfwEstimated = (grams: number) => {
+    setFormSeed({ metricId: 'efw', value: grams });
+    setFormKey((k) => k + 1);
+  };
+
+  const handleApplyGA = ({ weeks, days }: { weeks: number; days: number }) => {
+    setFormSeed((prev) => ({ ...prev, weeks, days }));
+    setFormKey((k) => k + 1);
+  };
+
   const metric = result
     ? getStandard(result.input.standardId).metrics[result.input.metricId]
     : null;
@@ -76,7 +97,16 @@ export default function LocalePage({ params: _params }: LocalePageProps) {
         </h1>
         <LanguageSwitcher />
       </div>
-      <InputForm onCalculate={handleCalculate} />
+      <EfwEstimator onEstimated={handleEfwEstimated} />
+      <DueDateCalculator onApplyGA={handleApplyGA} />
+      <InputForm
+        key={formKey}
+        initialMetricId={formSeed.metricId}
+        initialWeeks={formSeed.weeks}
+        initialDays={formSeed.days}
+        initialValue={formSeed.value}
+        onCalculate={handleCalculate}
+      />
       {result && metric && (
         <>
           <ResultCard
