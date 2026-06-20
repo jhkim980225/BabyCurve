@@ -1,0 +1,30 @@
+{
+  "id": "hadlock",
+  "name": "Hadlock EFW (Mikolajczyk global reference)",
+  "source": "Estimated fetal weight percentiles based on Hadlock FP, Harrist RB, Martinez-Poyer J. In utero analysis of fetal growth: a sonographic weight standard. Radiology 1991;181(1):129-33; with the global reference of Mikolajczyk et al. A global reference for fetal-birth-weight percentiles. Lancet 2011. Weeks 24-41, weights in grams. NOTE: verify against the client's chosen standard and have a clinician review before clinical/commercial use.",
+  "metrics": {
+    "efw": {
+      "unit": "g",
+      "weeks": {
+        "24": { "p3": 537, "p10": 582, "p50": 678, "p90": 775, "p97": 820 },
+        "25": { "p3": 627, "p10": 680, "p50": 792, "p90": 905, "p97": 957 },
+        "26": { "p3": 727, "p10": 788, "p50": 918, "p90": 1049, "p97": 1110 },
+        "27": { "p3": 837, "p10": 907, "p50": 1057, "p90": 1207, "p97": 1278 },
+        "28": { "p3": 957, "p10": 1037, "p50": 1209, "p90": 1380, "p97": 1460 },
+        "29": { "p3": 1086, "p10": 1177, "p50": 1372, "p90": 1567, "p97": 1658 },
+        "30": { "p3": 1224, "p10": 1327, "p50": 1546, "p90": 1766, "p97": 1868 },
+        "31": { "p3": 1370, "p10": 1485, "p50": 1730, "p90": 1976, "p97": 2091 },
+        "32": { "p3": 1522, "p10": 1650, "p50": 1923, "p90": 2196, "p97": 2323 },
+        "33": { "p3": 1679, "p10": 1820, "p50": 2121, "p90": 2423, "p97": 2563 },
+        "34": { "p3": 1840, "p10": 1994, "p50": 2324, "p90": 2654, "p97": 2808 },
+        "35": { "p3": 2002, "p10": 2169, "p50": 2528, "p90": 2887, "p97": 3055 },
+        "36": { "p3": 2162, "p10": 2343, "p50": 2731, "p90": 3119, "p97": 3300 },
+        "37": { "p3": 2319, "p10": 2513, "p50": 2929, "p90": 3345, "p97": 3540 },
+        "38": { "p3": 2470, "p10": 2677, "p50": 3120, "p90": 3562, "p97": 3770 },
+        "39": { "p3": 2612, "p10": 2831, "p50": 3299, "p90": 3767, "p97": 3986 },
+        "40": { "p3": 2742, "p10": 2972, "p50": 3464, "p90": 3956, "p97": 4186 },
+        "41": { "p3": 2859, "p10": 3099, "p50": 3611, "p90": 4124, "p97": 4364 }
+      }
+    }
+  }
+}

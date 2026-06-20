@@ -1,5 +1,5 @@
 {
   "standards": [
-    { "id": "who", "name": "WHO Fetal Growth", "metrics": ["efw"] }
+    { "id": "hadlock", "name": "Hadlock EFW (Mikolajczyk global reference)", "metrics": ["efw"] }
   ]
 }

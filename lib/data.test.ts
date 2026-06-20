@@ -4,14 +4,14 @@ import { getStandardIndex, getStandard } from './data';
 describe('data loader', () => {
   it('lists available standards from the index', () => {
     const index = getStandardIndex();
-    expect(index.standards.map((s) => s.id)).toContain('who');
+    expect(index.standards.map((s) => s.id)).toContain('hadlock');
   });
 
   it('loads a standard by id with its metrics', () => {
-    const who = getStandard('who');
-    expect(who.id).toBe('who');
-    expect(who.metrics.efw.unit).toBe('g');
-    expect(who.metrics.efw.weeks['28'].p50).toBe(1150);
+    const hadlock = getStandard('hadlock');
+    expect(hadlock.id).toBe('hadlock');
+    expect(hadlock.metrics.efw.unit).toBe('g');
+    expect(hadlock.metrics.efw.weeks['28'].p50).toBe(1209);
   });
 
   it('throws for an unknown standard id', () => {
