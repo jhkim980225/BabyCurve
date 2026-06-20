@@ -8,6 +8,7 @@ import { getStandard } from '@/lib/data';
 import { computePercentile } from '@/lib/percentile';
 import { addMeasurement, clearMeasurements, getMeasurements, type Measurement } from '@/lib/storage';
 import { Disclaimer } from '@/components/Disclaimer';
+import { DevInfo } from '@/components/DevInfo';
 
 interface Result {
   input: CalcInput;
@@ -80,6 +81,7 @@ export default function Home() {
             standardName={result.standardName}
             extraMarkers={extraMarkers}
           />
+          <DevInfo week={result.input.weeks} />
           <HistoryPanel
             measurements={filteredHistory}
             onSave={handleSave}
