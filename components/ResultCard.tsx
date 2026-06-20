@@ -1,6 +1,8 @@
 'use client';
 
+import { useRef } from 'react';
 import { GrowthChart } from './GrowthChart';
+import { ResultActions } from './ResultActions';
 import { ordinalSuffix } from '@/lib/ordinal';
 import type { MetricData } from '@/lib/types';
 
@@ -25,9 +27,12 @@ export function ResultCard({
 }: ResultCardProps) {
   const rounded = Math.round(percentile);
   const markerWeek = weeks + days / 7;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const fileName = `babycurve-${standardName.replace(/\s+/g, '-').toLowerCase()}-w${weeks}.png`;
+  const shareTitle = `BabyCurve · ${rounded}${ordinalSuffix(rounded)} percentile at ${weeks}w`;
 
   return (
-    <div className="glass-card p-4 text-center">
+    <div className="glass-card p-4 text-center" ref={cardRef}>
       <p className="text-xs uppercase tracking-widest text-slate-500">
         Week {weeks}
         {days ? ` + ${days}` : ''} · {standardName}
@@ -44,6 +49,8 @@ export function ResultCard({
         markerValue={value}
         extraMarkers={extraMarkers}
       />
+
+      <ResultActions targetRef={cardRef} fileName={fileName} shareTitle={shareTitle} />
 
       <p className="mt-3 text-[10px] text-slate-400">
         For reference only · Not medical advice
