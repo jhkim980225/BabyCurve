@@ -16,15 +16,16 @@ describe('sitemap', () => {
     }
   });
 
-  it('each entry has alternates.languages with all 9 locales', () => {
+  it('each entry has alternates.languages with all 9 locales plus x-default', () => {
     const entries = sitemap();
     for (const entry of entries) {
       expect(entry.alternates).toBeDefined();
       const langs = (entry.alternates as { languages: Record<string, string> }).languages;
-      expect(Object.keys(langs)).toHaveLength(9);
+      expect(Object.keys(langs)).toHaveLength(10); // 9 locales + x-default
       for (const { code } of LOCALES) {
         expect(langs[code]).toBe(BASE_URL + '/' + code);
       }
+      expect(langs['x-default']).toBe(BASE_URL + '/en');
     }
   });
 
