@@ -7,6 +7,7 @@ import { HistoryPanel } from '@/components/HistoryPanel';
 import { getStandard } from '@/lib/data';
 import { computePercentile } from '@/lib/percentile';
 import { addMeasurement, clearMeasurements, getMeasurements, type Measurement } from '@/lib/storage';
+import { Disclaimer } from '@/components/Disclaimer';
 
 interface Result {
   input: CalcInput;
@@ -86,6 +87,7 @@ export default function Home() {
           />
         </>
       )}
+      <Disclaimer />
     </main>
   );
 }
