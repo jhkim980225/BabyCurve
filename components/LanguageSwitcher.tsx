@@ -2,7 +2,6 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { LOCALES } from '@/lib/i18n';
-import { useContext } from 'react';
 
 const LOCALE_STORAGE_KEY = 'babycurve.locale';
 

@@ -27,11 +27,7 @@ interface FormSeed {
   value?: number;
 }
 
-interface LocalePageProps {
-  params: Promise<{ locale: string }>;
-}
-
-export default function LocalePage({ params: _params }: LocalePageProps) {
+export default function LocalePage() {
   const t = useT();
   const [result, setResult] = useState<Result | null>(null);
   const [history, setHistory] = useState<Measurement[]>([]);
