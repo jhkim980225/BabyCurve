@@ -16,7 +16,8 @@
   "result": {
     "week": "Week",
     "percentile": "percentile",
-    "referenceOnly": "For reference only · Not medical advice"
+    "referenceOnly": "For reference only · Not medical advice",
+    "shareTitle": "BabyCurve · {percentile}{suffix} percentile at {weeks}w"
   },
   "actions": {
     "saveImage": "Save image",

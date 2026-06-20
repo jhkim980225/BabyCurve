@@ -15,7 +15,7 @@ vi.mock('next/navigation', () => ({
 function renderLocale() {
   return render(
     <I18nProvider locale="en" messages={getMessages('en')}>
-      <LocalePage params={Promise.resolve({ locale: 'en' })} />
+      <LocalePage />
     </I18nProvider>,
   );
 }

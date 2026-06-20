@@ -31,7 +31,11 @@ export function ResultCard({
   const markerWeek = weeks + days / 7;
   const cardRef = useRef<HTMLDivElement>(null);
   const fileName = `babycurve-${standardName.replace(/\s+/g, '-').toLowerCase()}-w${weeks}.png`;
-  const shareTitle = `BabyCurve · ${rounded}${ordinalSuffix(rounded)} percentile at ${weeks}w`;
+  const shareTitle = t('result.shareTitle', {
+    percentile: rounded,
+    suffix: ordinalSuffix(rounded),
+    weeks,
+  });
 
   return (
     <div className="glass-card p-4 text-center" ref={cardRef}>
