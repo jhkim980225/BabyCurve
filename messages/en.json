@@ -1,0 +1,41 @@
+{
+  "app": {
+    "title": "Fetal Growth Calculator",
+    "description": "Check your baby's growth percentile on a standard growth curve."
+  },
+  "form": {
+    "standard": "Standard",
+    "metric": "Metric",
+    "weeks": "Weeks",
+    "days": "Days",
+    "measurement": "Measurement",
+    "calculate": "Calculate",
+    "errorWeeks": "Please enter a valid gestational week.",
+    "errorMeasurement": "Please enter a measurement."
+  },
+  "result": {
+    "week": "Week",
+    "percentile": "percentile",
+    "referenceOnly": "For reference only · Not medical advice"
+  },
+  "actions": {
+    "saveImage": "Save image",
+    "share": "Share"
+  },
+  "disclaimer": {
+    "text": "BabyCurve is for reference and educational purposes only and is not medical advice. Consult your healthcare provider."
+  },
+  "history": {
+    "title": "History",
+    "saveToHistory": "Save to history",
+    "clearAll": "Clear all"
+  },
+  "dev": {
+    "heading": "Week {week} — Development",
+    "sizeComparison": "Your baby is about the size of {size}.",
+    "weekLabel": "Week"
+  },
+  "languageSelect": {
+    "chooseLanguage": "Choose your language"
+  }
+}
