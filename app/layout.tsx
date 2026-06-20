@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { BASE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,7 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Fetal Growth Calculator',
+  metadataBase: new URL(BASE_URL),
+  title: 'BabyCurve · Fetal Growth Calculator',
   description: 'Check your baby\'s growth percentile on a standard growth curve.',
 };
 

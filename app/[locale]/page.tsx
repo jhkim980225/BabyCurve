@@ -88,9 +88,14 @@ export default function LocalePage() {
   return (
     <main className="mx-auto flex max-w-md flex-col gap-4 p-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-blue-900">
-          {t('app.title')}
-        </h1>
+        <div>
+          <h1 className="text-2xl font-extrabold text-blue-900">
+            {t('app.brand')}
+          </h1>
+          <p className="text-sm font-medium text-blue-700">
+            {t('app.title')}
+          </p>
+        </div>
         <LanguageSwitcher />
       </div>
       <EfwEstimator onEstimated={handleEfwEstimated} />

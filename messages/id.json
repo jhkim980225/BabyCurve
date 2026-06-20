@@ -3,8 +3,9 @@
     "note": "Machine/placeholder copy of English — replace with native translation."
   },
   "app": {
+    "brand": "BabyCurve",
     "title": "Fetal Growth Calculator",
-    "description": "Check your baby's growth percentile on a standard growth curve."
+    "description": "Check your baby's fetal growth percentile on standard growth curves."
   },
   "form": {
     "standard": "Standard",
