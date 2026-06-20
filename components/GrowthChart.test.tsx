@@ -32,4 +32,38 @@ describe('GrowthChart', () => {
     expect(cx).not.toBeNull();
     expect(Number.isNaN(Number(cx))).toBe(false);
   });
+
+  it('renders two extra-marker circles when extraMarkers has two items', () => {
+    const { container } = render(
+      <GrowthChart
+        metric={metric}
+        markerWeek={32}
+        markerValue={2000}
+        extraMarkers={[
+          { week: 28, value: 1200 },
+          { week: 36, value: 2600 },
+        ]}
+      />,
+    );
+    const extras = container.querySelectorAll('[data-testid="extra-marker"]');
+    expect(extras).toHaveLength(2);
+    extras.forEach((el) => {
+      expect(Number.isFinite(Number(el.getAttribute('cx')))).toBe(true);
+      expect(Number.isFinite(Number(el.getAttribute('cy')))).toBe(true);
+    });
+  });
+
+  it('renders no extra-marker circles when extraMarkers is empty', () => {
+    const { container } = render(
+      <GrowthChart metric={metric} markerWeek={32} markerValue={2000} extraMarkers={[]} />,
+    );
+    expect(container.querySelectorAll('[data-testid="extra-marker"]')).toHaveLength(0);
+  });
+
+  it('renders no extra-marker circles when extraMarkers is omitted', () => {
+    const { container } = render(
+      <GrowthChart metric={metric} markerWeek={32} markerValue={2000} />,
+    );
+    expect(container.querySelectorAll('[data-testid="extra-marker"]')).toHaveLength(0);
+  });
 });

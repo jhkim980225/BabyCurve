@@ -9,6 +9,7 @@ interface GrowthChartProps {
   markerValue: number;
   width?: number;
   height?: number;
+  extraMarkers?: { week: number; value: number }[];
 }
 
 const PAD = { top: 16, right: 16, bottom: 28, left: 40 };
@@ -19,6 +20,7 @@ export function GrowthChart({
   markerValue,
   width = 340,
   height = 240,
+  extraMarkers = [],
 }: GrowthChartProps) {
   const weeks = Object.keys(metric.weeks).map(Number).sort((a, b) => a - b);
 
@@ -58,6 +60,20 @@ export function GrowthChart({
         stroke="#1e3a8a"
         strokeDasharray="3 3"
       />
+      {extraMarkers.map((em, i) => {
+        const cx = x(Math.min(maxWeek, Math.max(minWeek, em.week)));
+        const cy = y(Math.min(maxVal, Math.max(minVal, em.value)));
+        return (
+          <circle
+            key={i}
+            data-testid="extra-marker"
+            cx={cx}
+            cy={cy}
+            r={4}
+            fill="rgba(124,58,237,0.7)"
+          />
+        );
+      })}
       <circle
         data-testid="marker"
         cx={x(clampedWeek)}
