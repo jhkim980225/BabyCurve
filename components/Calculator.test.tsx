@@ -1,11 +1,28 @@
-import { beforeEach, describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Home from '@/app/page';
+import LocalePage from '@/app/[locale]/page';
+import { I18nProvider } from '@/components/I18nProvider';
+import { getMessages } from '@/lib/i18n';
+
+// Mock next/navigation for LanguageSwitcher
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ replace: vi.fn() }),
+  usePathname: () => '/en',
+}));
+
+// Wrap in I18nProvider for locale context
+function renderLocale() {
+  return render(
+    <I18nProvider locale="en" messages={getMessages('en')}>
+      <LocalePage params={Promise.resolve({ locale: 'en' })} />
+    </I18nProvider>,
+  );
+}
 
 describe('Calculator page', () => {
   it('shows a result card after entering values and calculating', async () => {
-    render(<Home />);
+    renderLocale();
     await userEvent.type(screen.getByLabelText(/weeks/i), '30');
     await userEvent.type(screen.getByLabelText(/measurement/i), '1525');
     await userEvent.click(screen.getByRole('button', { name: /calculate/i }));
@@ -21,7 +38,7 @@ describe('Calculator page — history', () => {
   });
 
   it('shows measurement in history list after saving', async () => {
-    render(<Home />);
+    renderLocale();
 
     // Fill form and calculate
     await userEvent.type(screen.getByLabelText(/weeks/i), '30');
@@ -40,7 +57,7 @@ describe('Calculator page — history', () => {
   });
 
   it('clears history when Clear all is clicked', async () => {
-    render(<Home />);
+    renderLocale();
 
     await userEvent.type(screen.getByLabelText(/weeks/i), '30');
     await userEvent.type(screen.getByLabelText(/measurement/i), '1525');

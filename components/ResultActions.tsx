@@ -1,6 +1,7 @@
 'use client';
 
 import { toPng } from 'html-to-image';
+import { useT } from '@/components/I18nProvider';
 
 interface ResultActionsProps {
   targetRef: React.RefObject<HTMLElement | null>;
@@ -9,6 +10,7 @@ interface ResultActionsProps {
 }
 
 export function ResultActions({ targetRef, fileName = 'babycurve.png', shareTitle = 'BabyCurve' }: ResultActionsProps) {
+  const t = useT();
   const hasShare = typeof navigator !== 'undefined' && !!navigator.share;
 
   const handleSave = async () => {
@@ -51,14 +53,14 @@ export function ResultActions({ targetRef, fileName = 'babycurve.png', shareTitl
         onClick={handleSave}
         className="rounded-xl bg-blue-700 px-3 py-1.5 text-xs text-white"
       >
-        Save image
+        {t('actions.saveImage')}
       </button>
       {hasShare && (
         <button
           onClick={handleShare}
           className="rounded-xl bg-blue-700 px-3 py-1.5 text-xs text-white"
         >
-          Share
+          {t('actions.share')}
         </button>
       )}
     </div>
