@@ -1,5 +1,6 @@
 import type { GrowthStandard } from './types';
 import index from '@/data/standards/index.json';
+import who from '@/data/standards/who.json';
 import hadlock from '@/data/standards/hadlock.json';
 
 export interface StandardIndex {
@@ -7,6 +8,7 @@ export interface StandardIndex {
 }
 
 const STANDARDS: Record<string, GrowthStandard> = {
+  who: who as GrowthStandard,
   hadlock: hadlock as GrowthStandard,
 };
 

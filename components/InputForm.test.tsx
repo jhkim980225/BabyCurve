@@ -14,7 +14,7 @@ describe('InputForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /calculate/i }));
 
     expect(onCalculate).toHaveBeenCalledWith({
-      standardId: 'hadlock',
+      standardId: 'who',
       metricId: 'efw',
       weeks: 30,
       days: 2,

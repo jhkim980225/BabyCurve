@@ -14,6 +14,15 @@ describe('data loader', () => {
     expect(hadlock.metrics.efw.weeks['28']['50']).toBe(1209);
   });
 
+  it('loads the WHO standard with all five biometry metrics', () => {
+    const who = getStandard('who');
+    expect(who.id).toBe('who');
+    expect(Object.keys(who.metrics).sort()).toEqual(['ac', 'bpd', 'efw', 'fl', 'hc']);
+    expect(who.metrics.efw.percentiles).toContain(50);
+    expect(who.metrics.bpd.unit).toBe('mm');
+    expect(who.metrics.efw.weeks['37']['95']).toBe(3538);
+  });
+
   it('throws for an unknown standard id', () => {
     expect(() => getStandard('nope')).toThrow();
   });
