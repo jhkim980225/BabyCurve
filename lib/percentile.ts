@@ -1,21 +1,17 @@
-import type { MetricData, PercentileCutoffs } from './types';
-import { PERCENTILE_KEYS } from './types';
+import type { MetricData } from './types';
 
 export function gestationalWeeksToDecimal(weeks: number, days: number): number {
   return weeks + days / 7;
 }
 
+/** Interpolate each percentile's value across the two bounding weeks; clamp outside the range. */
 export function interpolateCutoffs(
   metric: MetricData,
   weekDecimal: number,
-): PercentileCutoffs {
-  const weekKeys = Object.keys(metric.weeks)
-    .map(Number)
-    .sort((a, b) => a - b);
-
+): Record<string, number> {
+  const weekKeys = Object.keys(metric.weeks).map(Number).sort((a, b) => a - b);
   const first = weekKeys[0];
   const last = weekKeys[weekKeys.length - 1];
-
   if (weekDecimal <= first) return { ...metric.weeks[String(first)] };
   if (weekDecimal >= last) return { ...metric.weeks[String(last)] };
 
@@ -28,26 +24,26 @@ export function interpolateCutoffs(
       break;
     }
   }
-
   const lo = metric.weeks[String(lower)];
   const hi = metric.weeks[String(upper)];
   const t = (weekDecimal - lower) / (upper - lower);
-
-  const result = {} as PercentileCutoffs;
-  for (const { key } of PERCENTILE_KEYS) {
-    result[key] = lo[key] + t * (hi[key] - lo[key]);
+  const result: Record<string, number> = {};
+  for (const p of metric.percentiles) {
+    const k = String(p);
+    result[k] = lo[k] + t * (hi[k] - lo[k]);
   }
   return result;
 }
 
+/** Map a measured value to a percentile by interpolating between cutoff points; clamp to the min/max percentile. */
 export function valueToPercentile(
   value: number,
-  cutoffs: PercentileCutoffs,
+  cutoffs: Record<string, number>,
+  percentiles: number[],
 ): number {
-  const points = PERCENTILE_KEYS.map(({ key, value: p }) => ({
-    p,
-    v: cutoffs[key],
-  })).sort((a, b) => a.v - b.v);
+  const points = percentiles
+    .map((p) => ({ p, v: cutoffs[String(p)] }))
+    .sort((a, b) => a.v - b.v);
 
   if (value <= points[0].v) return points[0].p;
   if (value >= points[points.length - 1].v) return points[points.length - 1].p;
@@ -55,12 +51,10 @@ export function valueToPercentile(
   for (let i = 0; i < points.length - 1; i++) {
     if (value >= points[i].v && value <= points[i + 1].v) {
       if (points[i + 1].v === points[i].v) {
-        // Flat segment: scan ahead to find the highest percentile at this value
         let j = i + 1;
         while (j < points.length - 1 && points[j + 1].v === points[i].v) j++;
         return points[j].p;
       }
-      // If value exactly equals points[i+1].v, check for a flat run starting there
       if (value === points[i + 1].v) {
         let j = i + 1;
         while (j < points.length - 1 && points[j + 1].v === points[i + 1].v) j++;
@@ -80,5 +74,5 @@ export function computePercentile(
   value: number,
 ): number {
   const cutoffs = interpolateCutoffs(metric, gestationalWeeksToDecimal(weeks, days));
-  return valueToPercentile(value, cutoffs);
+  return valueToPercentile(value, cutoffs, metric.percentiles);
 }
