@@ -1,0 +1,5 @@
+{
+  "standards": [
+    { "id": "who", "name": "WHO Fetal Growth", "metrics": ["efw"] }
+  ]
+}
