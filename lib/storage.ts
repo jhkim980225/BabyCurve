@@ -27,4 +27,21 @@ export function clearMeasurements(): void {
   localStorage.removeItem(STORAGE_KEY);
 }
 
-// addMeasurement added in Task 2
+export function addMeasurement(
+  m: Omit<Measurement, 'id' | 'ts'> & { id?: string; ts?: number },
+): Measurement {
+  if (typeof window === 'undefined') {
+    // SSR fallback: return a valid object without persisting
+    const ts = m.ts ?? Date.now();
+    const id = m.id ?? (String(ts) + Math.random());
+    return { ...m, id, ts } as Measurement;
+  }
+  const ts = m.ts ?? Date.now();
+  const id = m.id ?? (typeof crypto !== 'undefined' && crypto.randomUUID
+    ? crypto.randomUUID()
+    : String(ts) + Math.random());
+  const entry: Measurement = { ...m, id, ts } as Measurement;
+  const existing = getMeasurements();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([entry, ...existing]));
+  return entry;
+}
