@@ -11,7 +11,7 @@ describe('data loader', () => {
     const hadlock = getStandard('hadlock');
     expect(hadlock.id).toBe('hadlock');
     expect(hadlock.metrics.efw.unit).toBe('g');
-    expect(hadlock.metrics.efw.weeks['28'].p50).toBe(1209);
+    expect(hadlock.metrics.efw.weeks['28']['50']).toBe(1209);
   });
 
   it('throws for an unknown standard id', () => {
