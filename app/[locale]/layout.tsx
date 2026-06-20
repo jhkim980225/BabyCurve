@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
   const description: string = app.description ?? '';
 
   const fullTitle = `${brand} · ${title}`;
-  const alternates = buildAlternates();
+  const alternates = buildAlternates(locale);
   const localeUrl = BASE_URL + '/' + locale;
 
   return {

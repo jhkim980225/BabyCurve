@@ -4,9 +4,14 @@ import { LOCALES } from './i18n';
 
 describe('seo', () => {
   describe('buildAlternates', () => {
-    it('has canonical pointing to en locale', () => {
+    it('defaults canonical to the en locale', () => {
       const alternates = buildAlternates();
       expect(alternates.canonical).toBe(BASE_URL + '/en');
+    });
+
+    it('sets canonical to the given locale (no duplicate-of-en)', () => {
+      expect(buildAlternates('ja').canonical).toBe(BASE_URL + '/ja');
+      expect(buildAlternates('zh-TW').canonical).toBe(BASE_URL + '/zh-TW');
     });
 
     it('languages includes all 9 locale keys', () => {
@@ -24,7 +29,7 @@ describe('seo', () => {
     });
 
     it('path argument is appended to all URLs', () => {
-      const { canonical, languages } = buildAlternates('/some/path');
+      const { canonical, languages } = buildAlternates('en', '/some/path');
       expect(canonical).toBe(BASE_URL + '/en/some/path');
       expect(languages['en']).toBe(BASE_URL + '/en/some/path');
       expect(languages['x-default']).toBe(BASE_URL + '/en/some/path');

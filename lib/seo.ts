@@ -8,7 +8,10 @@ export function localePath(locale: string, path = ''): string {
   return '/' + locale + path;
 }
 
-export function buildAlternates(path = ''): {
+export function buildAlternates(
+  locale: string = DEFAULT_LOCALE,
+  path = '',
+): {
   canonical: string;
   languages: Record<string, string>;
 } {
@@ -20,7 +23,9 @@ export function buildAlternates(path = ''): {
   languages['x-default'] = BASE_URL + '/en' + path;
 
   return {
-    canonical: BASE_URL + '/' + DEFAULT_LOCALE + path,
+    // Canonical points at the current locale's own URL, not always the default,
+    // so non-English pages are not treated as duplicates of English.
+    canonical: BASE_URL + '/' + locale + path,
     languages,
   };
 }

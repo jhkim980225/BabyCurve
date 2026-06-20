@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     for (const { code: lc } of LOCALES) {
       languagesMap[lc] = BASE_URL + '/' + lc;
     }
+    languagesMap['x-default'] = BASE_URL + '/en';
     return {
       url,
       lastModified: new Date('2025-06-01'),
