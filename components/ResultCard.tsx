@@ -11,6 +11,7 @@ interface ResultCardProps {
   value: number;
   percentile: number;
   standardName: string;
+  extraMarkers?: { week: number; value: number }[];
 }
 
 export function ResultCard({
@@ -20,6 +21,7 @@ export function ResultCard({
   value,
   percentile,
   standardName,
+  extraMarkers,
 }: ResultCardProps) {
   const rounded = Math.round(percentile);
   const markerWeek = weeks + days / 7;
@@ -36,7 +38,12 @@ export function ResultCard({
       </p>
       <p className="mb-3 text-xs uppercase tracking-widest text-slate-500">percentile</p>
 
-      <GrowthChart metric={metric} markerWeek={markerWeek} markerValue={value} />
+      <GrowthChart
+        metric={metric}
+        markerWeek={markerWeek}
+        markerValue={value}
+        extraMarkers={extraMarkers}
+      />
 
       <p className="mt-3 text-[10px] text-slate-400">
         For reference only · Not medical advice
