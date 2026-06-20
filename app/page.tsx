@@ -1,95 +1,63 @@
 'use client';
 
-import { useState } from 'react';
-import { InputForm, type CalcInput } from '@/components/InputForm';
-import { ResultCard } from '@/components/ResultCard';
-import { HistoryPanel } from '@/components/HistoryPanel';
-import { getStandard } from '@/lib/data';
-import { computePercentile } from '@/lib/percentile';
-import { addMeasurement, clearMeasurements, getMeasurements, type Measurement } from '@/lib/storage';
-import { Disclaimer } from '@/components/Disclaimer';
-import { DevInfo } from '@/components/DevInfo';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { LOCALES, DEFAULT_LOCALE } from '@/lib/i18n';
+import { LanguageSelect } from '@/components/LanguageSelect';
 
-interface Result {
-  input: CalcInput;
-  percentile: number;
-  standardName: string;
+const LOCALE_STORAGE_KEY = 'babycurve.locale';
+
+/**
+ * Best-match a BCP-47 language tag against our LOCALES list.
+ * Strategy: exact match → language+region prefix → language prefix → default.
+ */
+function bestMatchLocale(browserLang: string): string {
+  const lower = browserLang.toLowerCase();
+  // Exact match (case-insensitive)
+  const exact = LOCALES.find((l) => l.code.toLowerCase() === lower);
+  if (exact) return exact.code;
+  // Language-region: e.g. navigator.language='zh-tw' should match 'zh-TW'
+  const normalized = LOCALES.find(
+    (l) => l.code.toLowerCase() === lower.replace('_', '-'),
+  );
+  if (normalized) return normalized.code;
+  // Language prefix: e.g. 'zh-hans' → 'zh-CN' or 'en-US' → 'en'
+  const prefix = lower.split('-')[0];
+  const byPrefix = LOCALES.find((l) => l.code.toLowerCase().startsWith(prefix));
+  if (byPrefix) return byPrefix.code;
+  return DEFAULT_LOCALE;
 }
 
-export default function Home() {
-  const [result, setResult] = useState<Result | null>(null);
-  const [history, setHistory] = useState<Measurement[]>([]);
+type PageState = 'loading' | 'selector' | 'redirecting';
 
-  const handleCalculate = (input: CalcInput) => {
-    const standard = getStandard(input.standardId);
-    const metric = standard.metrics[input.metricId];
-    const percentile = computePercentile(metric, input.weeks, input.days, input.value);
-    setResult({ input, percentile, standardName: standard.name });
-    // Refresh history to show all saved entries for this standard+metric
-    setHistory(getMeasurements());
-  };
+export default function RootPage() {
+  const router = useRouter();
+  const [state, setState] = useState<PageState>('loading');
 
-  const handleSave = () => {
-    if (!result) return;
-    addMeasurement({
-      standardId: result.input.standardId,
-      metricId: result.input.metricId,
-      weeks: result.input.weeks,
-      days: result.input.days,
-      value: result.input.value,
-      percentile: result.percentile,
-    });
-    setHistory(getMeasurements());
-  };
+  useEffect(() => {
+    const stored =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem(LOCALE_STORAGE_KEY)
+        : null;
 
-  const handleClear = () => {
-    clearMeasurements();
-    setHistory([]);
-  };
+    if (stored && LOCALES.some((l) => l.code === stored)) {
+      // Stored preference → navigate directly
+      router.replace('/' + stored);
+      setState('redirecting');
+    } else {
+      // No stored preference → show the language selector
+      setState('selector');
+    }
+  }, [router]);
 
-  const metric = result
-    ? getStandard(result.input.standardId).metrics[result.input.metricId]
-    : null;
+  if (state === 'loading' || state === 'redirecting') {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <span className="text-slate-400 text-sm">Loading…</span>
+      </div>
+    );
+  }
 
-  // Filter history to current standard+metric only
-  const filteredHistory = result
-    ? history.filter(
-        (m) => m.standardId === result.input.standardId && m.metricId === result.input.metricId,
-      )
-    : [];
-
-  // Map history entries to extraMarkers (week decimal)
-  const extraMarkers = filteredHistory.map((m) => ({
-    week: m.weeks + m.days / 7,
-    value: m.value,
-  }));
-
-  return (
-    <main className="mx-auto flex max-w-md flex-col gap-4 p-4">
-      <h1 className="text-center text-xl font-bold text-blue-900">
-        Fetal Growth Calculator
-      </h1>
-      <InputForm onCalculate={handleCalculate} />
-      {result && metric && (
-        <>
-          <ResultCard
-            metric={metric}
-            weeks={result.input.weeks}
-            days={result.input.days}
-            value={result.input.value}
-            percentile={result.percentile}
-            standardName={result.standardName}
-            extraMarkers={extraMarkers}
-          />
-          <DevInfo week={result.input.weeks} />
-          <HistoryPanel
-            measurements={filteredHistory}
-            onSave={handleSave}
-            onClear={handleClear}
-          />
-        </>
-      )}
-      <Disclaimer />
-    </main>
-  );
+  // state === 'selector'
+  return <LanguageSelect />;
 }
